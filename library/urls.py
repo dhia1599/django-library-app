@@ -22,7 +22,7 @@ from rest_framework import permissions
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from library.views import home
-from library_app.views import LogoutAndBlacklistView
+from library_app.views import LogoutAndBlacklistView, ResendOTPView, SendOTPView, ValidateOTPView
 
 # Configuration Swagger
 schema_view = get_schema_view(
@@ -58,6 +58,10 @@ urlpatterns = [
     path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/token/blacklist/', LogoutAndBlacklistView.as_view(), name='token_blacklist'),
+
+    path('auth/otp/send/', SendOTPView.as_view(), name='send_otp'),
+    path('auth/otp/validate/', ValidateOTPView.as_view(), name='validate_otp'),
+    path('auth/otp/resend/', ResendOTPView.as_view(), name='resend_otp'),
 
    path('', home, name='home')
     

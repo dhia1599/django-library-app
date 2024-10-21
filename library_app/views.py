@@ -13,6 +13,8 @@ from rest_framework import status, permissions
 from library_app.models import BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from library_app.utils import generate_otp, validate_otp
+
 # Create your views here.
 
 class CustomPagination(PageNumberPagination):
@@ -98,3 +100,35 @@ class LogoutAndBlacklistView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+
+class SendOTPView(APIView):
+    def post(self, request):
+        user_email = request.data.get('email')
+        if user_email:
+            otp = generate_otp(user_email)
+            if otp:
+                return Response({"message": "Un OTP a été envoyé à votre email."}, status=status.HTTP_200_OK)
+            return Response({"error": "Utilisateur non trouvé."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Email non fourni"}, status=status.HTTP_400_BAD_REQUEST)
+
+class ValidateOTPView(APIView):
+    def post(self, request):
+        user_email = request.data.get('email')
+        otp_provided = request.data.get('otp')
+        if user_email and otp_provided:
+            if validate_otp(user_email, otp_provided):
+                return Response({"message": "OTP validé avec succès."}, status=status.HTTP_200_OK)
+            return Response({"error": "OTP invalide ou expiré."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "Email et OTP non fournis"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class ResendOTPView(APIView):
+    def post(self, request):
+        user_email = request.data.get('email')
+        if user_email:
+            otp = generate_otp(user_email)
+            if otp:
+                return Response({"message": "Un nouvel OTP a été envoyé à votre email."}, status=status.HTTP_200_OK)
+            return Response({"error": "Utilisateur non trouvé."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Email non fourni"}, status=status.HTTP_400_BAD_REQUEST)

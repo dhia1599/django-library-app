@@ -9,6 +9,12 @@ This is a Django-based application for managing a library, allowing users to vie
 - Add reviews and ratings for books
 - Swagger-based API documentation
 - **Pagination, Filtering, and Ordering support for selected endpoints**
+- JWT-based authentication for securing API endpoints
+- Permissions and role management for access control
+- Object-level permissions for enhanced security
+- Password policy enforcement for user accounts
+- Throttling to prevent brute-force attacks
+- One Time Password (OTP) for two-factor authentication
 
 ## Installation
 
@@ -24,7 +30,13 @@ This is a Django-based application for managing a library, allowing users to vie
     cd django-library-app
     ```
 
-3. Run the development server:
+3. Install the dependencies:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. Run the development server:
 
     ```bash
     python manage.py runserver
@@ -35,6 +47,7 @@ This is a Django-based application for managing a library, allowing users to vie
 - Access to home page at `/`.
 - Access the admin panel at `/admin/`.
 - API documentation is available at `/swagger/`.
+- JWT Authentication is required for accessing most API endpoints.
 
 
 ## API Features
@@ -78,15 +91,27 @@ You can order results on the **Evaluations** endpoint (`/api/evaluations/`) by:
   ```
 
 
-## Custom Permissions
+## Security Features
 
-### IsAdminOrReadOnly
-- **Description**: 
-  - Cette permission permet uniquement aux utilisateurs authentifiés appartenant au groupe **admin** d'accéder aux endpoints en écriture (POST, PUT, DELETE).
-  - Les utilisateurs sans cette permission ne peuvent pas modifier, créer ou supprimer des données.
+### 1. JWT Authentication
 
-### IsOwnerOrReadOnly
-- **Description**:
-  - Cette permission permet aux utilisateurs du groupe **lecteur** de lire des ressources (GET, HEAD, OPTIONS), mais empêche toute modification des ressources (POST, PUT, PATCH, DELETE).
+The application uses **JWT (JSON Web Tokens)** for user authentication. All API endpoints are secured and require a valid JWT token to be accessed.
 
+### 2. Password Policy
 
+Password policy has been enforced to enhance security:
+
+### 3. Throttling
+
+Throttling is implemented to prevent brute-force attacks on the authentication endpoint:
+
+- A user is limited to **5 requests every 5 seconds** on the authentication endpoint.
+- If the limit is exceeded, the user will be temporarily blocked from making further requests.
+
+### 4. One Time Password (OTP)
+
+The application also supports **One Time Password (OTP)** for an additional layer of security during user authentication.
+
+### 5. Role-Based
+
+- **Role-Based Permissions**: Different roles (e.g., admin, reader) are assigned different permissions for accessing specific API endpoints.

@@ -107,3 +107,13 @@ class BlacklistedToken(models.Model):
 
     def __str__(self):
         return f"Token for {self.user.username} blacklisted on {self.blacklisted_at}"
+    
+
+class OTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    otp_code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"OTP for {self.user.email} - Active: {self.is_active}"
