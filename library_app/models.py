@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -97,3 +98,12 @@ class Evaluation(models.Model):
 
     def __str__(self):
         return f"{self.utilisateur} a évalué {self.livre.titre} - {self.note}/5"
+
+
+class BlacklistedToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=500)
+    blacklisted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Token for {self.user.username} blacklisted on {self.blacklisted_at}"

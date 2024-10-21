@@ -14,3 +14,4 @@ router.register(r'evaluations', EvaluationViewSet)
 
 # Ajoutez les routes générées par le routeur à urlpatterns
 urlpatterns = router.urls
+
