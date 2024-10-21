@@ -76,3 +76,17 @@ You can order results on the **Evaluations** endpoint (`/api/evaluations/`) by:
   ```plaintext
   GET /api/evaluations/?ordering=date_evaluation
   ```
+
+
+## Custom Permissions
+
+### IsAdminOrReadOnly
+- **Description**: 
+  - Cette permission permet uniquement aux utilisateurs authentifiés appartenant au groupe **admin** d'accéder aux endpoints en écriture (POST, PUT, DELETE).
+  - Les utilisateurs sans cette permission ne peuvent pas modifier, créer ou supprimer des données.
+
+### IsOwnerOrReadOnly
+- **Description**:
+  - Cette permission permet aux utilisateurs du groupe **lecteur** de lire des ressources (GET, HEAD, OPTIONS), mais empêche toute modification des ressources (POST, PUT, PATCH, DELETE).
+
+
